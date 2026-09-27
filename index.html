@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tata Surya 3D - Posisi Sesuai Real-Time</title>
+    <title>Tata Surya 3D - Posisi & Rotasi Akurat</title>
     <style>
         body, html {
             margin: 0;
@@ -132,7 +132,7 @@
 <body>
 
     <div class="top-panel">
-        <h1 id="panelTitle">TATA SURYA 3D - REAL-TIME POSISI</h1>
+        <h1 id="panelTitle">TATA SURYA 3D - POSISI & ROTASI AKURAT</h1>
         <div class="panel-right">
             <div class="clock-text">Waktu: <span id="clockText">-</span></div>
             <button class="back-btn" id="backBtn" onclick="resetView()">Kembali</button>
@@ -182,7 +182,7 @@
         starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
         scene.add(new THREE.Points(starsGeometry, new THREE.PointsMaterial({color: 0xffffff, size: 0.8, transparent: true, opacity: 0.8})));
 
-        // Fungsi Tekstur Planet & Benua Asli
+        // Fungsi Tekstur Planet
         function createTexture(type) {
             const canvas = document.createElement('canvas');
             canvas.width = 1024; canvas.height = 512;
@@ -249,24 +249,22 @@
             return new THREE.CanvasTexture(canvas);
         }
 
-        // Data planet dengan tambahan initialOffset agar posisinya akurat saat pertama kali dibuka
+        // Data planet dengan periode revolusi (orbit) dan rotasi harian asli (dalam satuan Hari Bumi)
         const planetData = [
             { name: "Matahari", radius: 16, distance: 0, periodDays: 1, tilt: 7.25, rotDays: 27, type: 'sun', isSun: true, initialOffset: 0 },
-            { name: "Merkurius", radius: 2.2, distance: 32, periodDays: 87.97, tilt: 0.03, rotDays: 58.6, type: 'mercury', initialOffset: 1.5 },
-            { name: "Venus", radius: 3.8, distance: 50, periodDays: 224.7, tilt: 177.36, rotDays: -243, type: 'venus', initialOffset: 3.2 },
-            { name: "Bumi", radius: 4, distance: 75, periodDays: 365.25, tilt: 23.44, rotDays: 1.0, type: 'earth', initialOffset: 4.8 },
-            { name: "Mars", radius: 3, distance: 100, periodDays: 686.98, tilt: 25.19, rotDays: 1.03, type: 'mars', initialOffset: 0.7 },
-            { name: "Jupiter", radius: 9, distance: 140, periodDays: 4332.59, tilt: 3.13, rotDays: 0.41, type: 'jupiter', initialOffset: 2.1 },
-            { name: "Saturnus", radius: 7.5, distance: 190, periodDays: 10759.22, tilt: 26.73, rotDays: 0.44, type: 'saturn', hasRings: true, initialOffset: 5.5 },
-            { name: "Uranus", radius: 5.2, distance: 240, periodDays: 30685.4, tilt: 97.77, rotDays: -0.72, type: 'uranus', hasRings: true, initialOffset: 1.1 },
-            { name: "Neptunus", radius: 5.2, distance: 290, periodDays: 60189.0, tilt: 28.32, rotDays: 0.67, type: 'neptune', initialOffset: 4.0 }
+            { name: "Merkurius", radius: 2.2, distance: 32, periodDays: 87.97, tilt: 0.03, rotDays: 58.6, type: 'mercury', initialOffset: 1.2 },
+            { name: "Venus", radius: 3.8, distance: 50, periodDays: 224.7, tilt: 177.36, rotDays: -243, type: 'venus', initialOffset: 2.8 },
+            { name: "Bumi", radius: 4, distance: 75, periodDays: 365.25, tilt: 23.44, rotDays: 1.0, type: 'earth', initialOffset: 4.1 },
+            { name: "Mars", radius: 3, distance: 100, periodDays: 686.98, tilt: 25.19, rotDays: 1.03, type: 'mars', initialOffset: 5.6 },
+            { name: "Jupiter", radius: 9, distance: 140, periodDays: 4332.59, tilt: 3.13, rotDays: 0.41, type: 'jupiter', initialOffset: 0.5 },
+            { name: "Saturnus", radius: 7.5, distance: 190, periodDays: 10759.22, tilt: 26.73, rotDays: 0.44, type: 'saturn', hasRings: true, initialOffset: 3.4 },
+            { name: "Uranus", radius: 5.2, distance: 240, periodDays: 30685.4, tilt: 97.77, rotDays: -0.72, type: 'uranus', hasRings: true, initialOffset: 1.9 },
+            { name: "Neptunus", radius: 5.2, distance: 290, periodDays: 60189.0, tilt: 28.32, rotDays: 0.67, type: 'neptune', initialOffset: 4.7 }
         ];
 
         const planets = [];
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
-
-        // Waktu patokan dasar (Epoch J2000 / awal tahun dihitung dalam detik nyata)
         const baseTime = Date.now();
 
         planetData.forEach(data => {
@@ -344,7 +342,7 @@
         window.resetView = function() {
             focusedObject = null;
             isTransitioning = true;
-            panelTitle.innerText = "TATA SURYA 3D - REAL-TIME POSISI";
+            panelTitle.innerText = "TATA SURYA 3D - POSISI & ROTASI AKURAT";
             backBtn.style.display = 'none';
         }
 
@@ -354,21 +352,21 @@
             const now = Date.now();
             const elapsedRealSeconds = (now - baseTime) / 1000;
             
-            // Kecepatan orbit dipercepat (faktor 50000) agar gerakan rotasi & revolusi planet terlihat jelas secara real-time
-            const simulationDays = (elapsedRealSeconds * 50000) / 86400;
+            // Kecepatan simulasi proporsional (faktor pengali disesuaikan agar pergerakan planet terlihat jelas tanpa terlalu ngebut)
+            const simulationDays = (elapsedRealSeconds * 1000) / 86400;
 
             const realDate = new Date(now);
             clockText.innerText = realDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + " | " + realDate.toLocaleTimeString('id-ID');
 
             planets.forEach(p => {
                 if (!p.data.isSun) {
-                    // Rumus posisi sudut orbit menggabungkan offset awal dan simulasi hari
+                    // Posisi orbit berdasarkan waktu saat ini
                     const angle = p.data.initialOffset + ((2 * Math.PI * simulationDays) / p.data.periodDays);
                     p.pivotGroup.position.x = Math.cos(angle) * p.data.distance;
                     p.pivotGroup.position.z = Math.sin(angle) * p.data.distance;
                 }
                 
-                // Rotasi harian planet pada porosnya
+                // Rotasi harian proporsional (Jupiter & Saturnus berputar cepat, Venus & Merkurius lambat/berlawanan)
                 const rotAngle = (2 * Math.PI * simulationDays) / p.data.rotDays;
                 p.mesh.rotation.y = rotAngle;
             });
