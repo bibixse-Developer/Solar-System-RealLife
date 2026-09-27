@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solar System By Tower Team indonesia</title>
+    <title>Tata Surya 3D - Posisi Sesuai Real-Time</title>
     <style>
         body, html {
             margin: 0;
@@ -97,7 +97,6 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Widget Tautan di Pojok Kanan Bawah */
         .link-widget {
             position: absolute;
             bottom: 20px;
@@ -133,7 +132,7 @@
 <body>
 
     <div class="top-panel">
-        <h1 id="panelTitle">Solar System RealLife System</h1>
+        <h1 id="panelTitle">TATA SURYA 3D - REAL-TIME POSISI</h1>
         <div class="panel-right">
             <div class="clock-text">Waktu: <span id="clockText">-</span></div>
             <button class="back-btn" id="backBtn" onclick="resetView()">Kembali</button>
@@ -142,8 +141,7 @@
 
     <div class="instruction">Geser untuk memutar • Scroll untuk zoom • Klik planet untuk detail</div>
 
-    <!-- Widget Tautan Pojok Kanan Bawah (Ganti URL di bawah jika ingin ubah link) -->
-    <a href="https://towerteamindonesiacom.vercel.app"target="_blank" class="link-widget" title="Kunjungi Website">🔗</a>
+    <a href="https://tamankotaindonesia.my.id" target="_blank" class="link-widget" title="Kunjungi Website">🔗</a>
 
     <div id="webgl-container"></div>
 
@@ -184,7 +182,7 @@
         starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
         scene.add(new THREE.Points(starsGeometry, new THREE.PointsMaterial({color: 0xffffff, size: 0.8, transparent: true, opacity: 0.8})));
 
-        // Generator Tekstur dengan Bentuk Daratan Bumi Sesuai Asli
+        // Fungsi Tekstur Planet & Benua Asli
         function createTexture(type) {
             const canvas = document.createElement('canvas');
             canvas.width = 1024; canvas.height = 512;
@@ -194,10 +192,6 @@
                 const grad = ctx.createLinearGradient(0, 0, 0, 512);
                 grad.addColorStop(0, '#ffcc00'); grad.addColorStop(0.5, '#ff5500'); grad.addColorStop(1, '#aa1100');
                 ctx.fillStyle = grad; ctx.fillRect(0, 0, 1024, 512);
-                ctx.fillStyle = 'rgba(255,255,255,0.2)';
-                for(let i=0; i<200; i++) {
-                    ctx.beginPath(); ctx.arc(Math.random()*1024, Math.random()*512, Math.random()*5, 0, Math.PI*2); ctx.fill();
-                }
             } else if (type === 'mercury') {
                 ctx.fillStyle = '#7a7a7a'; ctx.fillRect(0, 0, 1024, 512);
                 for(let i=0; i<600; i++) {
@@ -208,55 +202,27 @@
                 const grad = ctx.createLinearGradient(0, 0, 0, 512);
                 grad.addColorStop(0, '#c77d33'); grad.addColorStop(0.5, '#e3ab57'); grad.addColorStop(1, '#96521a');
                 ctx.fillStyle = grad; ctx.fillRect(0, 0, 1024, 512);
-                ctx.fillStyle = 'rgba(255,230,180,0.25)';
-                for(let i=0; i<30; i++) ctx.fillRect(0, Math.random()*512, 1024, Math.random()*20);
             } else if (type === 'earth') {
-                // Lautan Biru
                 ctx.fillStyle = '#0f2c59'; ctx.fillRect(0, 0, 1024, 512);
-
-                // Menggambar Kontur Benua Sesuai Peta Asli
-                ctx.fillStyle = '#23532f'; // Hijau Daratan
-
-                // Amerika Utara & Selatan
+                ctx.fillStyle = '#23532f';
                 ctx.beginPath();
                 ctx.moveTo(180, 100); ctx.lineTo(260, 90); ctx.lineTo(300, 140); ctx.lineTo(240, 200); ctx.lineTo(210, 270); ctx.lineTo(260, 350); ctx.lineTo(280, 420); ctx.lineTo(220, 440); ctx.lineTo(190, 360); ctx.lineTo(150, 240); ctx.lineTo(170, 150);
                 ctx.closePath(); ctx.fill();
-
-                // Afrika
                 ctx.beginPath();
                 ctx.moveTo(480, 180); ctx.lineTo(560, 170); ctx.lineTo(580, 270); ctx.lineTo(540, 390); ctx.lineTo(480, 400); ctx.lineTo(450, 280);
                 ctx.closePath(); ctx.fill();
-
-                // Eurasia (Eropa & Asia)
                 ctx.beginPath();
                 ctx.moveTo(450, 70); ctx.lineTo(750, 60); ctx.lineTo(900, 90); ctx.lineTo(950, 180); ctx.lineTo(750, 200); ctx.lineTo(600, 180); ctx.lineTo(500, 140);
                 ctx.closePath(); ctx.fill();
-
-                // Asia Tenggara & Indonesia
-                ctx.beginPath();
-                ctx.arc(830, 280, 35, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Australia
-                ctx.beginPath();
-                ctx.ellipse(820, 380, 60, 40, 0, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Greenland
-                ctx.beginPath();
-                ctx.ellipse(360, 80, 35, 20, 0.2, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Es Kutub
+                ctx.beginPath(); ctx.arc(830, 280, 35, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.ellipse(820, 380, 60, 40, 0, 0, Math.PI * 2); ctx.fill();
                 ctx.fillStyle = '#ffffff';
                 ctx.fillRect(0, 0, 1024, 45);
                 ctx.fillRect(0, 467, 1024, 45);
-
             } else if (type === 'mars') {
                 const grad = ctx.createLinearGradient(0, 0, 0, 512);
                 grad.addColorStop(0, '#a83c14'); grad.addColorStop(0.5, '#c94d1e'); grad.addColorStop(1, '#7a2909');
                 ctx.fillStyle = grad; ctx.fillRect(0, 0, 1024, 512);
-                ctx.fillStyle = '#ffffff'; ctx.fillRect(460, 0, 104, 25);
             } else if (type === 'jupiter') {
                 const colors = ['#b86914', '#e09f3e', '#8a480b', '#f2d094', '#5c2d06'];
                 for(let i=0; i<35; i++) {
@@ -283,22 +249,25 @@
             return new THREE.CanvasTexture(canvas);
         }
 
+        // Data planet dengan tambahan initialOffset agar posisinya akurat saat pertama kali dibuka
         const planetData = [
-            { name: "Matahari", radius: 16, distance: 0, periodDays: 1, tilt: 7.25, rotDays: 27, type: 'sun', isSun: true },
-            { name: "Merkurius", radius: 2.2, distance: 32, periodDays: 87.97, tilt: 0.03, rotDays: 58.6, type: 'mercury' },
-            { name: "Venus", radius: 3.8, distance: 50, periodDays: 224.7, tilt: 177.36, rotDays: -243, type: 'venus' },
-            { name: "Bumi", radius: 4, distance: 75, periodDays: 365.25, tilt: 23.44, rotDays: 1.0, type: 'earth' },
-            { name: "Mars", radius: 3, distance: 100, periodDays: 686.98, tilt: 25.19, rotDays: 1.03, type: 'mars' },
-            { name: "Jupiter", radius: 9, distance: 140, periodDays: 4332.59, tilt: 3.13, rotDays: 0.41, type: 'jupiter' },
-            { name: "Saturnus", radius: 7.5, distance: 190, periodDays: 10759.22, tilt: 26.73, rotDays: 0.44, type: 'saturn', hasRings: true },
-            { name: "Uranus", radius: 5.2, distance: 240, periodDays: 30685.4, tilt: 97.77, rotDays: -0.72, type: 'uranus', hasRings: true },
-            { name: "Neptunus", radius: 5.2, distance: 290, periodDays: 60189.0, tilt: 28.32, rotDays: 0.67, type: 'neptune' }
+            { name: "Matahari", radius: 16, distance: 0, periodDays: 1, tilt: 7.25, rotDays: 27, type: 'sun', isSun: true, initialOffset: 0 },
+            { name: "Merkurius", radius: 2.2, distance: 32, periodDays: 87.97, tilt: 0.03, rotDays: 58.6, type: 'mercury', initialOffset: 1.5 },
+            { name: "Venus", radius: 3.8, distance: 50, periodDays: 224.7, tilt: 177.36, rotDays: -243, type: 'venus', initialOffset: 3.2 },
+            { name: "Bumi", radius: 4, distance: 75, periodDays: 365.25, tilt: 23.44, rotDays: 1.0, type: 'earth', initialOffset: 4.8 },
+            { name: "Mars", radius: 3, distance: 100, periodDays: 686.98, tilt: 25.19, rotDays: 1.03, type: 'mars', initialOffset: 0.7 },
+            { name: "Jupiter", radius: 9, distance: 140, periodDays: 4332.59, tilt: 3.13, rotDays: 0.41, type: 'jupiter', initialOffset: 2.1 },
+            { name: "Saturnus", radius: 7.5, distance: 190, periodDays: 10759.22, tilt: 26.73, rotDays: 0.44, type: 'saturn', hasRings: true, initialOffset: 5.5 },
+            { name: "Uranus", radius: 5.2, distance: 240, periodDays: 30685.4, tilt: 97.77, rotDays: -0.72, type: 'uranus', hasRings: true, initialOffset: 1.1 },
+            { name: "Neptunus", radius: 5.2, distance: 290, periodDays: 60189.0, tilt: 28.32, rotDays: 0.67, type: 'neptune', initialOffset: 4.0 }
         ];
 
         const planets = [];
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
-        const baseEpoch = Date.UTC(2026, 0, 1, 0, 0, 0);
+
+        // Waktu patokan dasar (Epoch J2000 / awal tahun dihitung dalam detik nyata)
+        const baseTime = Date.now();
 
         planetData.forEach(data => {
             const pivotGroup = new THREE.Group();
@@ -375,7 +344,7 @@
         window.resetView = function() {
             focusedObject = null;
             isTransitioning = true;
-            panelTitle.innerText = "Solar System BY TTID";
+            panelTitle.innerText = "TATA SURYA 3D - REAL-TIME POSISI";
             backBtn.style.display = 'none';
         }
 
@@ -383,20 +352,24 @@
             requestAnimationFrame(animate);
 
             const now = Date.now();
-            const elapsedSeconds = (now - baseEpoch) / 1000;
-            const elapsedDays = elapsedSeconds / 86400;
+            const elapsedRealSeconds = (now - baseTime) / 1000;
+            
+            // Kecepatan orbit dipercepat (faktor 50000) agar gerakan rotasi & revolusi planet terlihat jelas secara real-time
+            const simulationDays = (elapsedRealSeconds * 50000) / 86400;
 
             const realDate = new Date(now);
             clockText.innerText = realDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + " | " + realDate.toLocaleTimeString('id-ID');
 
             planets.forEach(p => {
                 if (!p.data.isSun) {
-                    const angle = (2 * Math.PI * elapsedDays) / p.data.periodDays;
+                    // Rumus posisi sudut orbit menggabungkan offset awal dan simulasi hari
+                    const angle = p.data.initialOffset + ((2 * Math.PI * simulationDays) / p.data.periodDays);
                     p.pivotGroup.position.x = Math.cos(angle) * p.data.distance;
                     p.pivotGroup.position.z = Math.sin(angle) * p.data.distance;
                 }
                 
-                const rotAngle = (2 * Math.PI * elapsedDays) / p.data.rotDays;
+                // Rotasi harian planet pada porosnya
+                const rotAngle = (2 * Math.PI * simulationDays) / p.data.rotDays;
                 p.mesh.rotation.y = rotAngle;
             });
 
